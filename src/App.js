@@ -1,23 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState} from 'react';
+import useFetch from './useFetch';
+import Search from './Search';
 
 function App() {
+  const [searchQuery,setSearchQuery] = useState('');
+  const state=useFetch(searchQuery)
+  function handleSearchQuery(e) {
+    setSearchQuery(e.target.value);
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Search searchQuery={searchQuery} handleSearchQuery={handleSearchQuery}/>
+        {state.loading && <h1>Loading...</h1>}
+        {state.error!=='' && <h1>Error...</h1>}
+       
+        <div className='suggestions'>
+          {searchQuery!=='' && state.data.map((ele)=>{
+          return (
+            <h3 key={ele.id}>{ele.title}</h3>
+        )
+        })}
+        </div>
     </div>
   );
 }
