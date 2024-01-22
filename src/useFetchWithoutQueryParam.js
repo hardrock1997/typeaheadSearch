@@ -12,12 +12,12 @@ function reducer(state,action) {
   }
 }
 
-export default function useFetch(searchQuery) {
-    const [state,dispatch] = useReducer(reducer,{data:[],loading:true,error:''});
+export default function useFetchWithoutQueryParam() {
+    const [state,dispatch] = useReducer(reducer,{data:[],dataCopy:[],loading:true,error:''});
     useEffect(()=>{
         async function getData() {
           try{
-            const res=await fetch(`https://dummyjson.com/products/search?q=${searchQuery}`)
+            const res=await fetch(`https://dummyjson.com/products/`)
             if(res.ok) {
               const data=await res.json();
               dispatch({type:'fetch_data',payload:data.products})
@@ -28,11 +28,10 @@ export default function useFetch(searchQuery) {
            
           }
           catch(error) {
-            console.log(error)
             dispatch({type:'error',payload:error})
           }
         }
         getData();
-      },[searchQuery]);
-      return state;
+      },[]);
+      return [state];
 }

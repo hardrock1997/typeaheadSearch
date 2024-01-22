@@ -12,7 +12,14 @@ body {
   height: 20px;
 }
 .suggestions {
-  background-color: grey;
+  background-color: white;
   width: 350px;
   margin: auto;
+  color: black;
+  position: relative;
+  bottom: 15px;
+}
+.notfound {
+  background-color: black;
+  color: red;
 }

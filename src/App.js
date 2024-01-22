@@ -1,27 +1,12 @@
 import './App.css';
-import { useState} from 'react';
-import useFetch from './useFetch';
-import Search from './Search';
+// import SearchWithQueryParam from './SearchWithQueryParam';
+import SearchWithoutQueryParam from './SearchWithoutQueryParam';
 
 function App() {
-  const [searchQuery,setSearchQuery] = useState('');
-  const state=useFetch(searchQuery)
-  function handleSearchQuery(e) {
-    setSearchQuery(e.target.value);
-  }
   return (
     <div className="App">
-        <Search searchQuery={searchQuery} handleSearchQuery={handleSearchQuery}/>
-        {state.loading && <h1>Loading...</h1>}
-        {state.error!=='' && <h1>Error...</h1>}
-       
-        <div className='suggestions'>
-          {searchQuery!=='' && state.data.map((ele)=>{
-          return (
-            <h3 key={ele.id}>{ele.title}</h3>
-        )
-        })}
-        </div>
+        {/* <SearchWithQueryParam/> */}
+        <SearchWithoutQueryParam/>
     </div>
   );
 }
