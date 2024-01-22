@@ -1,4 +1,4 @@
-import {useReducer,useEffect} from 'react';
+import {useReducer,useEffect,useRef} from 'react';
 
 function reducer(state,action) {
   if(action.type==='fetch_data') {
@@ -14,24 +14,30 @@ function reducer(state,action) {
 
 export default function useFetchWithQueryParam(searchQuery) {
     const [state,dispatch] = useReducer(reducer,{data:[],loading:true,error:''});
+    const timerRef = useRef(null);
     useEffect(()=>{
-        async function getData() {
+        async function getData(delay) {
           try{
-            const res=await fetch(`https://dummyjson.com/products/search?q=${searchQuery}`)
-            if(res.ok) {
-              const data=await res.json();
-              dispatch({type:'fetch_data',payload:data.products})
+            if(timerRef.current) {
+              clearTimeout(timerRef.current);
             }
-            else {
-              throw new Error(`HTTP error! Status: ${res.status}`)
-            }
-           
+            timerRef.current=setTimeout(async()=>{
+              const res=await fetch(`https://dummyjson.com/products/search?q=${searchQuery}`)
+              if(res.ok) {
+                const data=await res.json();
+                dispatch({type:'fetch_data',payload:data.products})
+              }
+              else {
+                throw new Error(`HTTP error! Status: ${res.status}`)
+              }
+            },delay)   
           }
           catch(error) {
             dispatch({type:'error',payload:error})
           }
         }
-        getData();
+        getData(800);
+       
       },[searchQuery]);
       return state;
 }
